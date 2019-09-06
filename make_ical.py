@@ -7,7 +7,7 @@ week = timedelta(days=7)
 tz = pytz.timezone('America/Toronto')
 
 
-def make_ical(df, filename):
+def make_ical(df):
     calendar = Calendar()
     t = df['Dates début/fin'].map(lambda x: x.split('-'))
     df['begin_date'] = pd.to_datetime([x[0] for x in t])
@@ -39,9 +39,4 @@ def make_ical(df, filename):
             calendar.events.add(e)
             date += week
 
-    with open(filename, 'w') as my_file:
-        my_file.writelines(calendar)
-
-
-if __name__ == '__main__':
-    make_ical(pd.read_pickle('courses.csv'), 'my.ics')
+    return calendar

@@ -5,7 +5,7 @@ from collections import defaultdict
 import json
 
 
-def read_html(file):
+def read_table(file):
     soup = BeautifulSoup(file, 'html.parser')
     i: Tag
     data = defaultdict(list)
@@ -21,7 +21,14 @@ def read_html(file):
         name = name_holder.text.strip()
 
         rest = list(filter(lambda x: type(x) != NavigableString and x.text.strip() != "", rest.find('tbody').find_all('tr', recursive=False)))[-1]
-        rest = rest.find('tbody').find('tbody').find_all('tr', recursive=False)
+        rest = rest.find('tbody')
+        ## remakrs
+        if rest is None:
+            continue
+        rest = rest.find('tbody')
+        if rest is None:
+            continue
+        rest = rest.find_all('tr', recursive=False)
         print(name, end=';\n')
 
         column_name = [b.text.strip() for b in rest[0].find_all('th')]
@@ -31,7 +38,7 @@ def read_html(file):
         # drop column names
         rows = rest[1:]
 
-        for row in rows :
+        for row in rows:
             row = list(map(lambda x: x.text.strip(), row.find_all('td')))
             row.append(name)
             print('; '.join(row))
@@ -46,6 +53,6 @@ def read_html(file):
 
 
 if __name__ == '__main__':
-    df = read_html(open('page.html'))
+    df = read_table(open('page.html'))
     df.to_pickle('courses.csv')
     print(df.head())
