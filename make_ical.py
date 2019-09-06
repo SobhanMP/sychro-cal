@@ -10,8 +10,8 @@ tz = pytz.timezone('America/Toronto')
 def make_ical(df):
     calendar = Calendar()
     t = df['Dates début/fin'].map(lambda x: x.split('-'))
-    df['begin_date'] = pd.to_datetime([x[0] for x in t])
-    df['end_date'] = pd.to_datetime([x[-1] for x in t])
+    df['begin_date'] = pd.to_datetime([x[0] for x in t], dayfirst=True)
+    df['end_date'] = pd.to_datetime([x[-1] for x in t], dayfirst=True)
     t = df['Jours et heures']
     df['begin_time'] = pd.to_datetime(t.map(lambda x: x.split(' ')[1]))
     df['end_time'] = pd.to_datetime(t.map(lambda x: x.split(' ')[-1]))
