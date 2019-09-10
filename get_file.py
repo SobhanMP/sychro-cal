@@ -22,8 +22,11 @@ def fill_elem(driver, elem_id, value, end=Keys.RETURN):
     elem.send_keys(end)
 
 
-def login(username, password):
-    driver: WebDriver = webdriver.Chrome()
+def login(username, password, headless = False):
+    option = webdriver.ChromeOptions()
+    if headless:
+        option.headless=True
+    driver: WebDriver = webdriver.Chrome(options=option)
     driver.get(synchro_url)
     fill_elem(driver, 'txtIdentifiant', username, end=Keys.TAB)
     fill_elem(driver, 'txtMDP', password)

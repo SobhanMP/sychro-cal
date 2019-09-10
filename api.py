@@ -21,21 +21,22 @@ def hello_world():
     username = data['username']
     password = data['password']
 
-    driver = login(username, password)
+    driver = login(username, password, headless=True)
     result = get_semester_list(driver)
     driver.quit()
     return json.dumps(result)
 
-
+import time
 @app.route('/calendar', methods=['POST'])
 def f():
+    now = time.time()
     data = request.json
-    print(data)
+    print(data['username'])
 
     username = str(data['username'])
     password = str(data['password'])
 
-    driver = login(username, password)
+    driver = login(username, password, headless=True)
     result = get_semester_list(driver)
     if 'selection' in data:
         selection = data['selection']
@@ -47,11 +48,11 @@ def f():
 
     courses = pd.concat(tables)
     calendar = make_ical(courses)
-
+    print('took {}s'.format(time.time() - now))
     return Response(''.join(calendar),
                     mimetype='text/calendar',
                     headers={'Content-Disposition': 'attachment; filename=calendar.ics'})
 
 
 if __name__ == '__main__':
-    app.run(use_reloader=True)
+    app.run()
