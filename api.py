@@ -8,7 +8,7 @@ import tempfile
 from get_file import login, get_semester_list, get_courses
 from make_ical import make_ical
 from open_file import read_table
-
+import time
 app = Flask(__name__)
 CORS(app)
 
@@ -26,7 +26,7 @@ def hello_world():
     driver.quit()
     return json.dumps(result)
 
-import time
+
 @app.route('/calendar', methods=['POST'])
 def f():
     now = time.time()
